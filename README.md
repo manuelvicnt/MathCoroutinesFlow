@@ -1,5 +1,7 @@
 This sample showcases an Android app that uses both [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) and [Channel](https://kotlinlang.org/docs/reference/coroutines/channels.html) from Kotlin Coroutines. 
 
+It also includes tests! Very imporant to have a maintainable application.
+
 ## Differences between Flow and Channel
 
 - Flow has a cold behavior, every time an observer applies a terminal operator on it, it'll start
