@@ -37,10 +37,14 @@ to the Channel and the new ones as they're produced.
 ## Launching coroutines
 
 There are two clearly-defined ways to create coroutines:
-- Launch: This is "fire and forget" kind of Coroutine. It doesn't return any value. E.g. a coroutine
-that logs something to console.
+
+- Launch: This is "fire and forget" kind of coroutine. It doesn't return any value. E.g. a coroutine
+that logs something to console. We use this in [`ColdFibonacciProducer.kt`](https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app/src/main/java/com/manuelvicnt/coroutinesflow/fibonacci/impl/ColdFibonacciProducer.kt)
+to start our Fibonacci computation, here we don't need to return a value since we're sending the numbers to the `Channel`.
+
 - Async: creates a Coroutine that returns a value. E.g. a coroutine that returns the response
-of a network request.
+of a network request. We use it in [`UserRepository.kt`](https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app/src/main/java/com/manuelvicnt/coroutinesflow/user/impl/UserRepository.kt)
+where we create a coroutine to obtain the user information. Why we create a coroutine? Retrieving that information can be expensive and we might want to do it on a background thread.
 
 ## Learnings
 
