@@ -18,6 +18,8 @@ package com.manuelvicnt.coroutinesflow.user
 
 import kotlinx.coroutines.Deferred
 
+typealias User = String
+
 interface UserRepo {
-    suspend fun getUserAsync(): Deferred<String>
+    suspend fun getUserAsync(): Deferred<User>
 }

@@ -35,6 +35,13 @@ number updates, if it unsubscribes from the Channel, it's ok, nothing happens, i
 Whenever it re-subscribes again (maybe after a configuration change), then it'll receive the last item emitted 
 to the Channel and the new ones as they're produced.
 
+- [`UserRepository`](https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app/src/main/java/com/manuelvicnt/coroutinesflow/user/impl/UserRepository.kt)
+has the use case of returning a deferred computation. However, although it's not fully implemented, it has the logic
+of how you could expose a stream of User objects. Imagine that you want to handle user sessions and want to expose
+to the rest of the application the User that is logged in at any point. As with `NeverEndingFibonacci`, this functionality
+is agnostic of View lifecycle events and has its own lifetime and that's why it's also implemented with a 
+`ConflatedBroadcastChannel`. 
+
 <img src="https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app_running.gif" width="300">
 
 ## Launching coroutines

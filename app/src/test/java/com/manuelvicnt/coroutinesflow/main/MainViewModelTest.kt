@@ -58,6 +58,7 @@ class MainViewModelTest {
             mainCoroutineRule.testDispatcher.advanceTimeBy(3000)
             assertEquals(3, subject.neverEndingFibonacci.receive())
         } finally {
+            subject.neverEndingFibonacci.cancel()
             fibonacci.stopNeverEndingFibonacci()
         }
     }

@@ -42,8 +42,10 @@ class NeverEndingFibonacciProducerTest {
 
             val secondValue = subject.fibonacci().receive()
             assertEquals(3, secondValue)
+            mainCoroutineRule.testDispatcher.advanceTimeBy(1000)
         } finally {
             // Regardless of the assertions above, we always have to stop the job to not create a infinite loop
+            subject.fibonacci().cancel()
             subject.stopNeverEndingFibonacci()
         }
     }

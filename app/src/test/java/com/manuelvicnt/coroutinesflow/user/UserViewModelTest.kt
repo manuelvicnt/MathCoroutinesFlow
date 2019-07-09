@@ -36,18 +36,18 @@ class UserViewModelTest {
     fun `GetUser happy path`() = mainCoroutineRule.runBlocking {
         val expected = "Manuel"
         val subject = UserViewModel(object: UserRepo {
-            override suspend fun getUserAsync(): Deferred<String> {
+            override suspend fun getUserAsync(): Deferred<User> {
                 return CompletableDeferred(expected)
             }
         })
 
-        assertEquals(expected, subject.loadUser())
+        assertEquals("Hello $expected!", subject.loadUser())
     }
 
     @Test
     fun `GetUser sad path`() = mainCoroutineRule.runBlocking {
         val subject = UserViewModel(object: UserRepo {
-            override suspend fun getUserAsync(): Deferred<String> {
+            override suspend fun getUserAsync(): Deferred<User> {
                 throw IllegalStateException()
             }
         })
