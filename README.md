@@ -16,8 +16,7 @@ the last emitted value. For that, use Channels. Not maintaining state is really 
 
 - Normally, when creating a Channel, you specify the Dispatcher it'll execute its code on. However, this is not
 true when creating a Flow. In a Flow, you don't specify the dispatcher because it will be executed in the 
-consumer's dispatcher by default. In case you want to modify it, you have the `flowOn` and `flowWith` operators.
-
+consumer's dispatcher by default. In case you want to modify it, you have the [`flowOn`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flow-on.html) and [`flowWith`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flow-with.html) operators.
 
 ## Flow and Channels in the app
 
@@ -35,6 +34,8 @@ return anything, we'll send the elements to the Channel. The View will consume/s
 number updates, if it unsubscribes from the Channel, it's ok, nothing happens, it'll keep producing numbers. 
 Whenever it re-subscribes again (maybe after a configuration change), then it'll receive the last item emitted 
 to the Channel and the new ones as they're produced.
+
+<img src="https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app_running.gif" width="300">
 
 ## Launching coroutines
 
