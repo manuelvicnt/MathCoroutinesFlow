@@ -94,6 +94,7 @@ This functionality is available in the `androidx.lifecycle:lifecycle-runtime-ktx
 we can cancel (great for testing). If you create coroutines with `GlobalScope` you manually have to track down
 every coroutine you create, whereas with a custom scope you can track them all together.
 
-- `supervisorScope`. You can find this in [`UserRepository.kt`](https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app/src/main/java/com/manuelvicnt/coroutinesflow/user/impl/UserRepository.kt). If you notice, `getUserAsync()`
+- `supervisorScope` & `coroutineScope`. You can find this in [`UserRepository.kt`](https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app/src/main/java/com/manuelvicnt/coroutinesflow/user/impl/UserRepository.kt). If you notice, `getUserAsync()`
 is a suspend function; we use `supervisorScope` to create a new scope out of the one that is calling
-the method. And this is because we need a scope to create new coroutines!
+the method. And this is because we need a scope to create new coroutines! Find a `supervisorScope` vs `coroutineScope`
+comparison in that file.

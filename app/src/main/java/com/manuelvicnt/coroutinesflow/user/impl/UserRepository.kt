@@ -31,11 +31,27 @@ import kotlinx.coroutines.channels.ReceiveChannel
 @ExperimentalCoroutinesApi
 class UserRepository : UserRepo {
 
+    /**
+     * In order to create Coroutines inside a suspend function, we need a Scope. There are two ways to do this: using a
+     * supervisorScope or coroutineScope. Which one should you use?
+     *
+     * CoroutineScope vs SupervisorScope
+     * ------------------------------------------------------------
+     *
+     * with a supervisorScope, a failure of a child coroutine does not cause this scope to fail and
+     * does not affect its other children. E.g. You're creating multiple requests in parallel that don't depend on each
+     * other (e.g. uploading logs to different servers), if a network request fails, you don't want the others to cancel
+     * because they're independent. Use supervisorScope in that case!
+     *
+     * with a coroutineScope, a failure of a child coroutine causes this scope to fail and all other child coroutines
+     * will be cancelled too. For example, let's say that you create two requests in parallel and you need
+     * both of them to succeed in order to proceed; if one of them fails, you want that error to propagate and cancel
+     * the other network request too. Use coroutineScope in this case!
+     */
     override suspend fun getUserAsync(): Deferred<User> {
-        // We use supervisorScope to be able to create Coroutines inside this method.
-        // For this specific code, it doesn't make a lot of sense (we could've just returned the String).
-        // But what if we had to create multiple requests in parallel to get the information of our user??
-        // Then we'd need supervisorScope!
+        // For this specific code, it doesn't make a lot of sense creating a coroutine
+        // We could've just returned the String. Just doing it in this way so that we learn how to return Deferred Fakes
+        // in UserViewModelTest.kt
         return supervisorScope {
             async {
                 delay(5000)
