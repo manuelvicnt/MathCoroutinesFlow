@@ -47,6 +47,10 @@ class UserRepository : UserRepo {
      * will be cancelled too. For example, let's say that you create two requests in parallel and you need
      * both of them to succeed in order to proceed; if one of them fails, you want that error to propagate and cancel
      * the other network request too. Use coroutineScope in this case!
+     *
+     *
+     * Note: CoroutineScope and SupervisorScope will suspend and wait for its children coroutines to finish
+     * before returning
      */
     override suspend fun getUserAsync(): Deferred<User> {
         // For this specific code, it doesn't make a lot of sense creating a coroutine

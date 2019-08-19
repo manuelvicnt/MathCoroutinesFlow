@@ -17,7 +17,6 @@
 package com.manuelvicnt.coroutinesflow.fibonacci.impl
 
 import com.manuelvicnt.coroutinesflow.MainCoroutineRule
-import com.manuelvicnt.coroutinesflow.fibonacci.impl.ColdFibonacciProducer
 import com.manuelvicnt.coroutinesflow.runBlocking
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first

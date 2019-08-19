@@ -28,6 +28,7 @@ import com.manuelvicnt.coroutinesflow.obtainViewModel
 import com.manuelvicnt.coroutinesflow.user.UserActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     private fun prepareNeverEndingFibonacci() {
         val neverEndingFibonacciText = findViewById<TextView>(R.id.never_ending_fibonacci)
         lifecycleScope.launchWhenStarted {
-            viewModel.neverEndingFibonacci.consumeEach {
+            viewModel.neverEndingFibonacci.collect {
                 neverEndingFibonacciText.text = it.toString()
             }
         }

@@ -16,7 +16,10 @@ the last emitted value. For that, use Channels. Not maintaining state is really 
 
 - Normally, when creating a Channel, you specify the Dispatcher it'll execute its code on. However, this is not
 true when creating a Flow. In a Flow, you don't specify the dispatcher because it will be executed in the 
-consumer's dispatcher by default. In case you want to modify it, you have the [`flowOn`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flow-on.html) and [`flowWith`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flow-with.html) operators.
+consumer's dispatcher by default. In case you want to modify it, you have the [`flowOn`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flow-on.html) operator.
+
+- Channels should be an implementation detail in your app. Even if you need to create a because producer and consumer have
+different lifetimes, NEVER expose a Channel, expose a Flow instead. You can use the [`asFlow()`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/as-flow.html) operator.
 
 ## Flow and Channels in the app
 
@@ -30,9 +33,9 @@ cold observable behavior, it will start the sequence from the beginning.
 - [`NeverEndingFibonacci`](https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app/src/main/java/com/manuelvicnt/coroutinesflow/fibonacci/impl/NeverEndingFibonacciProducer.kt) is implemented with a `Channel` instead of a `Flow`. Since Channels are hot,
 it'll keep emitting Fibonacci numbers even if there are no consumers listening for the events. We create the loop
 to emit items within a `launch` coroutine because we just want to start and forget about it, we don't want to 
-return anything, we'll send the elements to the Channel. The View will consume/subscribe to this Channel to listen for
-number updates, if it unsubscribes from the Channel, it's ok, nothing happens, it'll keep producing numbers. 
-Whenever it re-subscribes again (maybe after a configuration change), then it'll receive the last item emitted 
+return anything, we'll send the elements to the Channel. The View will consume/subscribe to this Channel by means of the Flow interface.
+When listening for number updates, if it unsubscribes from the Flow, it's ok, nothing happens, it'll keep producing numbers.
+Whenever it collects again (maybe after a configuration change) from the Flow, the consumer will receive the last item emitted
 to the Channel and the new ones as they're produced.
 
 - [`UserRepository`](https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app/src/main/java/com/manuelvicnt/coroutinesflow/user/impl/UserRepository.kt)

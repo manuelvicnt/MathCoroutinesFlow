@@ -16,9 +16,9 @@
 
 package com.manuelvicnt.coroutinesflow.fibonacci
 
-import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.Flow
 
 interface NeverEndingFibonacci {
 
-    fun fibonacci(): ReceiveChannel<Long>
+    fun fibonacci(): Flow<Long>
 }

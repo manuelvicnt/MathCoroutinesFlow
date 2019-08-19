@@ -17,9 +17,13 @@
 package com.manuelvicnt.coroutinesflow.fibonacci.impl
 
 import com.manuelvicnt.coroutinesflow.MainCoroutineRule
-import com.manuelvicnt.coroutinesflow.fibonacci.impl.NeverEndingFibonacciProducer
 import com.manuelvicnt.coroutinesflow.runBlocking
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.broadcastIn
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -30,24 +34,29 @@ class NeverEndingFibonacciProducerTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
+    /**
+     * For testing, if we want to test subsequent emissions to the Flow, a good idea is to convert it to a
+     * Channel with the broadcastIn operator and consume events one by one.
+     */
     @Test
     fun `Never ending Fibonacci doesn't stop when called multiple times`() = mainCoroutineRule.runBlocking {
         val subject = NeverEndingFibonacciProducer()
+        subject.startNeverEndingFibonacci(mainCoroutineRule.testDispatcher)
+        val channel = subject.fibonacci().broadcastIn(TestCoroutineScope(Job())).openSubscription()
+
         try {
-            subject.startNeverEndingFibonacci(mainCoroutineRule.testDispatcher)
-            val initialValue = subject.fibonacci().receive()
+            val initialValue = channel.receive()
             assertEquals(2, initialValue)
 
             mainCoroutineRule.testDispatcher.advanceTimeBy(3000)
 
-            val secondValue = subject.fibonacci().receive()
+            val secondValue = channel.receive()
             assertEquals(3, secondValue)
             mainCoroutineRule.testDispatcher.advanceTimeBy(1000)
         } finally {
-            // Regardless of the assertions above, we always have to stop the job to not create a infinite loop
-            subject.fibonacci().cancel()
+            // Regardless of the assertions above, we always have to stop the channel to not create a infinite loop
+            channel.cancel()
             subject.stopNeverEndingFibonacci()
         }
     }
-
 }

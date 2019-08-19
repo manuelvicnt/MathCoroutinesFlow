@@ -17,15 +17,20 @@
 package com.manuelvicnt.coroutinesflow.user
 
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class UserViewModel(private val userRepo: UserRepo) : ViewModel() {
 
     suspend fun loadUser(): String {
-        return try {
-            "Hello ${userRepo.getUserAsync().await()}!"
-        } catch (e: Exception) {
-            "Error!"
+        return withContext(Dispatchers.Main) {
+            try {
+                "Hello ${userRepo.getUserAsync().await()}!"
+            } catch (e: Exception) {
+                "Error!"
+            }
         }
     }
 }

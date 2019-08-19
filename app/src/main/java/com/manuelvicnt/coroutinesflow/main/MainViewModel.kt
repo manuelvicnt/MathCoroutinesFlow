@@ -22,6 +22,7 @@ import com.manuelvicnt.coroutinesflow.fibonacci.ColdFibonacci
 import com.manuelvicnt.coroutinesflow.fibonacci.NeverEndingFibonacci
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
@@ -52,6 +53,6 @@ class MainViewModel(
      * Thus, we won't get a new subscription after a configuration change (for instance), and
      * the UI won't get updates.
      */
-    val neverEndingFibonacci: ReceiveChannel<Long>
+    val neverEndingFibonacci: Flow<Long>
         get() = neverEndingFibonacciParam.fibonacci()
 }

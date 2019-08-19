@@ -24,6 +24,9 @@ import com.manuelvicnt.coroutinesflow.fibonacci.impl.NeverEndingFibonacciProduce
 import com.manuelvicnt.coroutinesflow.runBlocking
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.broadcastIn
+import kotlinx.coroutines.test.TestCoroutineScope
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -45,21 +48,5 @@ class MainViewModelTest {
 
         assertEquals(2, LiveDataTestUtil.getValue(subject.coldFibonacci))
         assertEquals(3, LiveDataTestUtil.getValue(subject.coldFibonacci))
-    }
-
-    @Test
-    fun `Tests Never ending fibonacci Live Data`() = mainCoroutineRule.runBlocking {
-        val fibonacci = NeverEndingFibonacciProducer()
-        val subject = MainViewModel(FakeColdFibonacciProducer(), fibonacci)
-
-        try {
-            fibonacci.startNeverEndingFibonacci(mainCoroutineRule.testDispatcher)
-            assertEquals(2, subject.neverEndingFibonacci.receive())
-            mainCoroutineRule.testDispatcher.advanceTimeBy(3000)
-            assertEquals(3, subject.neverEndingFibonacci.receive())
-        } finally {
-            subject.neverEndingFibonacci.cancel()
-            fibonacci.stopNeverEndingFibonacci()
-        }
     }
 }

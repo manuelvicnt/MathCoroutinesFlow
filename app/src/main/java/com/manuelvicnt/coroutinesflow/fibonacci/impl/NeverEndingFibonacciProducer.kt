@@ -21,6 +21,8 @@ import com.manuelvicnt.coroutinesflow.fibonacci.NeverEndingFibonacci
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 
 @ExperimentalCoroutinesApi
 class NeverEndingFibonacciProducer : NeverEndingFibonacci {
@@ -28,14 +30,13 @@ class NeverEndingFibonacciProducer : NeverEndingFibonacci {
     private var started = false
 
     /**
-     * We expose a ReceiveChannel because we don't want consumers to receive a
-     * ConflatedBroadcastChannel type from our _neverEndingFibonacci variable.
-     *
-     * With this interface, you can only consume elements from the channel.
+     * We expose a Flow because we don't want consumers to receive a ConflatedBroadcastChannel type from our
+     * _neverEndingFibonacci variable. Channels should be an implementation detail. ALWAYS expose Flow.
      */
-    override fun fibonacci(): ReceiveChannel<Long> {
+    @Synchronized
+    override fun fibonacci(): Flow<Long> {
         if (!started) startNeverEndingFibonacci()
-        return _neverEndingFibonacci.openSubscription()
+        return _neverEndingFibonacci.asFlow()
     }
 
     /**
@@ -48,6 +49,18 @@ class NeverEndingFibonacciProducer : NeverEndingFibonacci {
     }
 
     /**
+     * This will stop the never ending Fibonacci channel forever.
+     * Once you cancel a Job, you cannot open it again.
+     *
+     * The job will cancel the scope in which it's used and it'll propagate the cancellation to
+     * its children coroutines.
+     */
+    @VisibleForTesting
+    fun stopNeverEndingFibonacci() {
+        neverEndingFibonacciJob.cancel()
+    }
+
+    /**
      * When we start the never ending fibonacci, we create a coroutine with `launch`
      * which is a "fire and forget" kind of coroutine. We don't have to return any
      * value, we're going send what it produces to the ConflatedBroadcastChannel.
@@ -57,8 +70,9 @@ class NeverEndingFibonacciProducer : NeverEndingFibonacci {
      * @param dispatcher Dispatcher to use for calculating Fibonacci numbers. Very useful for testing.
      */
     @VisibleForTesting
+    @Synchronized
     fun startNeverEndingFibonacci(
-            dispatcher: CoroutineDispatcher = Dispatchers.Default
+        dispatcher: CoroutineDispatcher = Dispatchers.Default
     ) = neverEndingFibonacciScope.launch(dispatcher) {
         started = true
         var first = 1L
@@ -70,24 +84,12 @@ class NeverEndingFibonacciProducer : NeverEndingFibonacci {
             first = second
             second = next
             delay(3000) // Since delay is a suspend function that handles cancellation,
-                        // when the scope that started this coroutine (neverEndingFibonacciScope)
-                        // is cancelled and the coroutine execution comes to this suspension point,
-                        // the coroutine will stop and will finish executing. If this suspension
-                        // point weren't here and we wouldn't delay it, then you'd have to use the
-                        // property isActive and do something like `if (!isActive) break`
+            // when the scope that started this coroutine (neverEndingFibonacciScope)
+            // is cancelled and the coroutine execution comes to this suspension point,
+            // the coroutine will stop and will finish executing. If this suspension
+            // point weren't here and we wouldn't delay it, then you'd have to use the
+            // property isActive and do something like `if (!isActive) break`
         }
-    }
-
-    /**
-     * This will stop the never ending Fibonacci channel forever.
-     * Once you cancel a Job, you cannot open it again.
-     *
-     * The job will cancel the scope in which it's used and it'll propagate the cancellation to
-     * its children coroutines.
-     */
-    @VisibleForTesting
-    fun stopNeverEndingFibonacci() {
-        neverEndingFibonacciJob.cancel()
     }
 }
 
