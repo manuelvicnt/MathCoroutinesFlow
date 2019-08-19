@@ -18,7 +18,7 @@ the last emitted value. For that, use Channels. Not maintaining state is really 
 true when creating a Flow. In a Flow, you don't specify the dispatcher because it will be executed in the 
 consumer's dispatcher by default. In case you want to modify it, you have the [`flowOn`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flow-on.html) operator.
 
-- Channels should be an implementation detail in your app. Even if you need to create a because producer and consumer have
+- Channels should be an implementation detail in your app. Even if you need to create one because producer and consumer have
 different lifetimes, NEVER expose a Channel, expose a Flow instead. You can use the [`asFlow()`](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/as-flow.html) operator.
 
 ## Flow and Channels in the app
@@ -100,4 +100,4 @@ every coroutine you create, whereas with a custom scope you can track them all t
 - `supervisorScope` & `coroutineScope`. You can find this in [`UserRepository.kt`](https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app/src/main/java/com/manuelvicnt/coroutinesflow/user/impl/UserRepository.kt). If you notice, `getUserAsync()`
 is a suspend function; we use `supervisorScope` to create a new scope out of the one that is calling
 the method. And this is because we need a scope to create new coroutines! Find a `supervisorScope` vs `coroutineScope`
-comparison in that file.
+comparison in that file. Another thing to notice is that both of these functions suspend and wait for its children coroutines to finish before resuming. 
