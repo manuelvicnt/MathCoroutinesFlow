@@ -1,6 +1,6 @@
 This sample showcases an Android app that uses both [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) and [Channel](https://kotlinlang.org/docs/reference/coroutines/channels.html) from Kotlin Coroutines. 
 
-It also includes tests! Very imporant to have a maintainable application.
+It also includes tests! Very important to have a maintainable application.
 
 ## Differences between Flow and Channel
 
@@ -11,7 +11,7 @@ With a BroadcastChannel, all observers get the same element emitted, it broadcas
 
 - Use Channels when the producer and the consumer have different lifetimes. For example, a View and a 
 ViewModel have different lifetimes, you may not want to consume a Flow from the View because it'll start 
-execution everytime that the View gets created (for instance) and there's no way to continue execution or get 
+execution every time that the View gets created (for instance) and there's no way to continue execution or get 
 the last emitted value. For that, use Channels. Not maintaining state is really bad for configuration changes.
 
 - Normally, when creating a Channel, you specify the Dispatcher it'll execute its code on. However, this is not
@@ -26,7 +26,7 @@ different lifetimes, NEVER expose a Channel, expose a Flow instead. You can use 
 The behavior of the app showcases how `Flow` and `Channel` work: 
 
 - [`ColdFibonnaci`](https://github.com/manuelvicnt/MathCoroutinesFlow/blob/master/app/src/main/java/com/manuelvicnt/coroutinesflow/fibonacci/impl/ColdFibonacciProducer.kt) is implemented with a `Flow` and exposed to the View with a [`LiveData`](https://developer.android.com/topic/libraries/architecture/livedata). 
-Therefore, whenever the  view is no longer present, it'll unobserve the `LiveData` that will propagate that cancellation 
+Therefore, whenever the view is no longer present, it'll unobserve the `LiveData` that will propagate that cancellation 
 to the Flow. Whenever the View is present, the `LiveData` will start observing the `Flow` again, and because it has a 
 cold observable behavior, it will start the sequence from the beginning.
 
