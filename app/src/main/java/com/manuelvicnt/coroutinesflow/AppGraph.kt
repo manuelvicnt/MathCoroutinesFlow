@@ -27,8 +27,10 @@ import com.manuelvicnt.coroutinesflow.main.MainViewModel
 import com.manuelvicnt.coroutinesflow.user.impl.UserRepository
 import com.manuelvicnt.coroutinesflow.user.UserViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import java.lang.IllegalStateException
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 object AppDIGraph {
     val coldFibonacciProducer by lazy { ColdFibonacciProducer() }
@@ -36,6 +38,7 @@ object AppDIGraph {
     val userRepository by lazy { UserRepository() }
 }
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 object ViewModelFactory : ViewModelProvider.Factory {
 

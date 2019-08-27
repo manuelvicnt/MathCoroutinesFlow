@@ -24,7 +24,9 @@ import androidx.lifecycle.lifecycleScope
 import com.manuelvicnt.coroutinesflow.R
 import com.manuelvicnt.coroutinesflow.ViewModelFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class UserActivity : AppCompatActivity() {
 

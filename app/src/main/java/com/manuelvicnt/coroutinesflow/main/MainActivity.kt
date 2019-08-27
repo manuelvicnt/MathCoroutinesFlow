@@ -28,8 +28,10 @@ import com.manuelvicnt.coroutinesflow.R
 import com.manuelvicnt.coroutinesflow.ViewModelFactory
 import com.manuelvicnt.coroutinesflow.user.UserActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
