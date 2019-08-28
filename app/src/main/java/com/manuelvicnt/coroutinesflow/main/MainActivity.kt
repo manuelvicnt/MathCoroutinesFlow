@@ -20,26 +20,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import com.manuelvicnt.coroutinesflow.R
-import com.manuelvicnt.coroutinesflow.obtainViewModel
+import com.manuelvicnt.coroutinesflow.ViewModelFactory
 import com.manuelvicnt.coroutinesflow.user.UserActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels { ViewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = obtainViewModel()
         prepareUI()
     }
 
