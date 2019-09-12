@@ -18,22 +18,21 @@ package com.manuelvicnt.coroutinesflow.user
 
 import android.os.Bundle
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.manuelvicnt.coroutinesflow.R
-import com.manuelvicnt.coroutinesflow.obtainViewModel
+import com.manuelvicnt.coroutinesflow.ViewModelFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 class UserActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: UserViewModel
+    private val viewModel: UserViewModel by viewModels { ViewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
-
-        viewModel = obtainViewModel()
 
         val textView = findViewById<TextView>(R.id.user)
         lifecycleScope.launchWhenCreated {
