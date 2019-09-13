@@ -20,10 +20,10 @@ import androidx.annotation.VisibleForTesting
 import com.manuelvicnt.coroutinesflow.fibonacci.NeverEndingFibonacci
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class NeverEndingFibonacciProducer : NeverEndingFibonacci {
 
