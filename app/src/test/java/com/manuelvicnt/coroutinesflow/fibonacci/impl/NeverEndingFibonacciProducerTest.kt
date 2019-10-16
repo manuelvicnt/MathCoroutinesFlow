@@ -31,10 +31,6 @@ class NeverEndingFibonacciProducerTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    /**
-     * For testing, if we want to test subsequent emissions to the Flow, a good idea is to convert it to a
-     * Channel with the broadcastIn operator and consume events one by one.
-     */
     @Test
     fun `Never ending Fibonacci doesn't stop when called multiple times`() = mainCoroutineRule.runBlocking {
         val subject = NeverEndingFibonacciProducer()
