@@ -19,11 +19,8 @@ package com.manuelvicnt.coroutinesflow.fibonacci.impl
 import com.manuelvicnt.coroutinesflow.MainCoroutineRule
 import com.manuelvicnt.coroutinesflow.runBlocking
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.broadcastIn
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -42,21 +39,11 @@ class NeverEndingFibonacciProducerTest {
     fun `Never ending Fibonacci doesn't stop when called multiple times`() = mainCoroutineRule.runBlocking {
         val subject = NeverEndingFibonacciProducer()
         subject.startNeverEndingFibonacci(mainCoroutineRule.testDispatcher)
-        val channel = subject.fibonacci().broadcastIn(TestCoroutineScope(Job())).openSubscription()
+        val elements = subject.fibonacci().take(2).toList()
 
-        try {
-            val initialValue = channel.receive()
-            assertEquals(2, initialValue)
+        assertEquals(2, elements[0])
+        assertEquals(3, elements[1])
 
-            mainCoroutineRule.testDispatcher.advanceTimeBy(3000)
-
-            val secondValue = channel.receive()
-            assertEquals(3, secondValue)
-            mainCoroutineRule.testDispatcher.advanceTimeBy(1000)
-        } finally {
-            // Regardless of the assertions above, we always have to stop the channel to not create a infinite loop
-            channel.cancel()
-            subject.stopNeverEndingFibonacci()
-        }
+        subject.stopNeverEndingFibonacci()
     }
 }
